@@ -26,6 +26,37 @@ module.exports = {
         } catch (error) {
             res.status(400).json({ message: 'erro ao criar usuario', error: error.message });
         }
+    },
+
+    getTask: async (req, res) => {
+        const { id } = req.params
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ message: 'ID invalido' })
+        }
+        try {
+            const getuser = await prisma.user.findFirst({
+                where: { id: Number(id) },
+            });
+            res.status(200).json({ message: 'usuario encontrado', getuser });
+        } catch (error) {
+            res.status(500).json({ message: 'usuario não encontrado', error: error.message });
+        }
+    },
+
+    deleteUser: async (req, res) => {
+        const { id } = req.params
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ message: 'ID invalido' });
+        } try {
+            const deleting = await prisma.user.delete({
+                where: { id: Number(id) },
+            });
+            res.status(200).json({ message: 'usuario deletado', deleting });
+        } catch (error) {
+            req.status(500).json({ message: 'usuario não encontrado', error: error.message });
+        }
     }
+
+
 
 }
