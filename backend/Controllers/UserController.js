@@ -28,7 +28,7 @@ module.exports = {
         }
     },
 
-    getTask: async (req, res) => {
+    getUser: async (req, res) => {
         const { id } = req.params
         if (!id || isNaN(id)) {
             return res.status(400).json({ message: 'ID invalido' })
@@ -53,10 +53,25 @@ module.exports = {
             });
             res.status(200).json({ message: 'usuario deletado', deleting });
         } catch (error) {
-            req.status(500).json({ message: 'usuario não encontrado', error: error.message });
+            res.status(500).json({ message: 'usuario não encontrado', error: error.message });
         }
-    }
+    },
 
+    updateUser: async (req, res) => {
+        const { id } = req.params
+        const { Fname, Lname } = req.body;
 
+        try {
+            const userupdate = await prisma.user.update({
+                where: { id: Number(id) },
+                data: {
+                    Fname, Lname
+                }
+            });
+            res.status(200).json({ message: 'Usuario editado com sucesso', user: userupdate });
+        } catch (error) {
+            res.status(500).json({ message: 'usuario não editado', error: error.message });
+        }
+    },
 
 }
