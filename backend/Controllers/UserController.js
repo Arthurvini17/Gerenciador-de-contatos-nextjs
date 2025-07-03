@@ -15,4 +15,17 @@ module.exports = {
             });
         }
     },
+
+    createManyUsers: async (req, res) => {
+        const users = req.body
+        try {
+            const created = await prisma.user.createMany({
+                data: users
+            });
+            res.status(201).json({ message: 'Usuario criado com sucesso', users: created })
+        } catch (error) {
+            res.status(400).json({ message: 'erro ao criar usuario', error: error.message });
+        }
+    }
+
 }
